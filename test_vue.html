@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="top">
+			{{toptitle}}
+			<a :[att]="url">...</a>
+			<span @click="doSomething">doSomething</span>
+			<p>{{computedmessage}}</p>
+			<p>{{computedmessage_set}}</p>
+		</div>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el: '#top',
+			data: {
+				"toptitle": "test-vue",
+				"att": "href",
+				"url": "//www.baidu.com"
+			},
+			computed:{
+				computedmessage : function(){
+					// 
+					return this.toptitle.split('').reverse().join('')
+				},
+				// test gettet setter
+				computedmessage_set:{
+					set : function(newV){
+						this.toptitle = newV;
+					},
+					get : function(){
+						return this.toptitle + "this is get";
+					},
+				}
+			},
+			methods:{
+				doReverse : function(){
+					return this.toptitle.split('').reverse().join('')
+				}
+			},
+			//  适合异步回调
+			watch:{
+				toptitle : function(v){
+					console.log('watch-title::>>',v)
+				}
+			}
+		});
+
+		function doSomething() {
+		}
+	</script>
+</html>

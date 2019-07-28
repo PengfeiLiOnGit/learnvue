@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ä¸</title>
+		<link rel="stylesheet" type="text/css" href="jqeruy-ui/jquery-ui.css" />
+		<link rel="stylesheet" type="text/css" href="jqeruy-ui/jquery-ui.theme.min.css" />
+	</head>
+	<style>
+		.a{position: absolute;}
+		
+		.b{color: antiquewhite;}
+	</style>
+	<body>
+		<div class="trigger">Trigger</div>
+		<div class="result"></div>
+		<div class="log"></div>
+
+		<input type="text" name="date" id="date" />
+		<div type="text" name="dialog" id="dialog" />
+		<input type="text" name="progerss" id="progerss" />
+	</body>
+	<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+	<script src="jqeruy-ui/jquery-ui.min.js"></script>
+
+	<script type="text/javascript">
+		$.widget("custom.superDialog", $.ui.dialog, {
+			open: function() {
+				console.log("open");
+				// return this._super();
+			}
+		});
+		// $("#dialog").superDialog();
+		$("#date").datepicker();
+		var dialog = $("#dialog").dialog();
+		dialog.dialog("close");
+		// $( ":data(ui-dialog)" ).dialog( "close" );
+
+		$.widget("custom.progressbar", {
+
+			// Default options.
+			options: {
+				value: 0
+			},
+			_create: function() {
+				var progress = this.options.value + "%";
+				this.element
+					.addClass("progressbar")
+					.text(progress);
+			}
+		});
+		
+		$("#progerss").progressbar();
+	</script>
+</html>

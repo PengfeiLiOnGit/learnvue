@@ -1,0 +1,10 @@
+/* 蓝色 */
+#header {
+  /* red */
+  border: 1px solid #c00;
+  /* 红色边框 */
+}
+#footer {
+  border: 1px solid #00c;
+  /* 蓝色边框 */
+}

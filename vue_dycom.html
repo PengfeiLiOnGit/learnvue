@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>动态组件</title>
+	</head>
+	<body>
+		<div id="top">
+			<!-- keep-alive 缓存组件，不会重新创建 -->
+			<!-- 异步组件 -->
+			<async ref="asyncTag"></async>
+			<!-- 访问父组件 $root,$parent -->
+			<!-- 访问子组件$refs -->
+			
+			<!-- 依赖注入DI -->
+			<!-- emit -->
+			<div @click="$emit('test','123')"> this is test emit</div>
+			<div id="emit-example-simple">
+			  <welcome-button @welcome="sayHi"></welcome-button>
+			</div>
+			<!-- v-once 计算一次template -->
+		</div>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script type="text/javascript">
+		Vue.component('welcome-button', {
+		  template: `
+			<button v-on:click="$emit('welcome')">
+			  Click me to be welcomed
+			</button>
+		  `
+		});
+		Vue.component('async',function(resolve,reject){
+			resolve({
+				template:`,
+				<div><p>{{t}}</p>
+				<input ref="input"/>
+				<child ref="i"></child></div>`,
+				computed:{
+					t : function(){
+						return 2;
+					}
+				},
+				methods:{
+					doTest : function(){
+						console.log("DI")
+					}
+				},
+				// 方法交由vue管理
+				provide : function(){
+					return {
+						doTest : this.doTest
+					}
+				}
+			});
+			// 不会调用到这里
+			reject({
+				name : 'error'
+			});
+		});
+		Vue.component('child',{
+			template:`<p>{{t2}}</p>`,
+			computed:{
+				t2 : function(){
+					// 使用注入的函数 ,非响应式
+					// this.doTest();
+					// this.test();
+					return 22333;
+				}
+			},
+			// 依赖注入
+			// inject:['doTest']
+			inject:{
+				// 别名用法
+				'test':'doTest'
+			}
+		});
+		// 访问子组件
+		let vm = new Vue({
+			el:'#top',
+			computed:{
+				
+			},
+			methods:{
+				doTest : function(){
+					console.log("1")
+				},
+				test : function(){
+					console.log('test');
+					this.$emit('doTest',function(){
+						console.log(2)
+					});
+				},
+				sayHi: function () {
+				  alert('Hi!')
+				}
+			}
+		});
+		// $refs 不是响应式的
+		vm.$refs.asyncTag.$refs.input.focus();
+		vm.$refs.asyncTag.$refs.input.value = 'xxxx';
+		
+		vm.$on('test', function (msg) {
+		  console.log(msg)
+		});
+		vm.$emit('test', 'hi');
+	</script>
+
+</html>

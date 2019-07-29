@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			.active {
+				height: 200px;
+				background: linear-gradient(to left, red, black);
+				width: 100%;
+			}
+
+			.middle {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				margin-top: -100px;
+				margin-left: -100px;
+				width: 200px;
+				height: 200px;
+			}
+
+			.border {
+				border: 2px #0000CC solid;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="top" class="">
+			<!-- <div v-bind:class="{active:isActive,middle:isActive,'border':isActive}"></div> -->
+			<!-- <div v-bind:class="classObject"></div> -->
+			<!-- <div v-bind:class="[active,middle]"></div> -->
+			<!-- 三元表达式 -->
+			<!-- <div v-bind:class="[isActive?active : '',middle]"></div> -->
+			<!-- <com class="active "></com> -->
+			<div v-bind:style="styleObject"></div>
+		</div>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script type="text/javascript">
+		Vue.component('com',{
+			template:'<div class="middle">this is a component</div>'
+		});
+		
+		let vm = new Vue({
+			el: '#top',
+			data: {
+				height:'200px',
+				isActive: true,
+				classO: {
+					active: true
+				},
+				active: 'active',
+				middle: 'middle',
+				styleObject : {
+					height : '200px',
+					backgroundColor : 'red'
+				}
+			},
+			computed: {
+				classObject: function() {
+					return {
+						active: this.isActive
+					}
+				}
+			}
+		});
+		
+	</script>
+
+</html>

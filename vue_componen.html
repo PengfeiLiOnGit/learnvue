@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>组件</title>
+	</head>
+	<body>
+		<div id="top">
+			<first :title="name"></first>
+			<p is="first" :title="name"></p>
+
+			<blog-post title="My journey with Vue"></blog-post>
+
+			<first v-for="n in names" :key="n" :title="n"></first>
+			<!-- 每个组件必须只有一个根元素 -->
+
+			<!-- 组件监听 -->
+			<div style="color: #CC0000;">
+				<first :title="name" @enlarge="large"></first>
+			</div>
+			<custom-input v-model="searchText"></custom-input>
+		</div>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script type="text/javascript">
+		// 组件的data 需要return
+		// 全局注册
+		Vue.component('first', {
+			// 组件维护自身作用域中的变量
+			data: function() {
+				return {
+					count: 0
+				}
+			},
+			template: `<div>
+			<div v-html="title"></div>
+			<button @click="count ++">{{count}} - {{title}}</button>
+			<button @click="$emit('enlarge')">large</button>
+			<button @click="enlarge">enlarge</button>
+			</div>
+			`,
+			methods: {
+				enlarge: function() {
+					alert(2)
+				}
+			},
+			props: ['title']
+		});
+		Vue.component('custom-input', {
+			props: ['value'],
+			template: `
+						<input
+				  v-bind:value="value"
+				  v-on:input="$emit('input', $event.target.value)"
+				>
+			  `
+		})
+
+		Vue.component('blog-post', {
+			props: ['title'],
+			template: '<h3>{{ title }}</h3>'
+		})
+
+		let vm = new Vue({
+			el: '#top',
+			data: {
+				name: "Jony",
+				names: ['J', 'Q'],
+				searchText : ''
+			},
+			methods: {
+				large: function() {
+					alert(1)
+				}
+			}
+		});
+	</script>
+</html>

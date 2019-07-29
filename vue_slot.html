@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>插槽</title>
+	</head>
+	<body>
+		<div id="top">
+			<alert-box>{{title}}</alert-box>
+			<!-- 后备内容 -->
+			<alert-box></alert-box>
+
+			<!-- 动态组件使用is 特性 -->
+			<!-- 静态不使用bind绑定即可 -->
+			<component :is="current">{{title}}</component>
+
+			<component-a></component-a>
+			<!-- 注意 v-slot 只能添加在一个 <template> -->
+			<base-layout>
+				<!-- template 具名插槽 -->
+				<template v-slot:header>
+					<h1>Here might be a page title</h1>
+				</template>
+
+				<p>A paragraph for the main content.</p>
+				<p>And another one.</p>
+
+				<template v-slot:footer>
+					<p>Here's some contact info</p>
+				</template>
+			</base-layout>
+			<!-- 作用域插槽 - bind 绑定元素 -->
+			<current-user>
+			  <template v-slot:default="slotProps" :user="user">
+				{{ slotProps.user.firstName }}
+			  </template>
+			</current-user>
+		</div>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script type="text/javascript">
+		// 作用域插槽
+		Vue.component('current-user',{
+			template:`<span>
+			  <slot v-bind:user="user">
+				{{ user.lastName }}
+			  </slot>
+			</span>`,
+			props:['user']
+		});
+		let vm = new Vue({
+			el: '#top',
+			data: {
+				title: 'JJJ',
+				current: 'alert2',
+				user : {
+					firstName : "Li",
+					lastName : "pengfei"
+				}
+			},
+			// 组件局部注册
+			// 局部注册的组件在子组件中不可用
+			components: {
+				'component-a': {
+					template: `
+						<div>this 3<slot></slot></div>
+					`,
+				}
+			}
+		});
+		//  具名插槽
+		Vue.component('base-layout', {
+			// 后备内容
+			template: `
+				<div class="container">
+				  <header>
+					<slot name="header"></slot>
+				  </header>
+				  <main>
+					<slot></slot>
+				  </main>
+				  <footer>
+					<slot name="footer"></slot>
+				  </footer>
+				</div>
+			`,
+		});
+		Vue.component('alert-box', {
+			// 后备内容
+			template: `
+				<slot>Submit</slot>
+			`,
+		});
+		Vue.component('alert2', {
+			template: `,
+				<div>this 2<slot></slot></div>
+			`,
+		});
+		Vue.component('alert3', {
+			template: `
+				<div>this 3<slot></slot></div>
+			`,
+		});
+	</script>
+</html>

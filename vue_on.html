@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="top">
+			<p @click="counter+=1">{{counter}}</p>
+			<div @click="do1($event)">do1:{{text1}}</div>
+			<div @click="do2">do2:{{text2}}</div>
+			<!-- 事件修饰符 -->
+			<a href="x" @click.prevent="">A</a>
+			<!-- 事件修饰符串联 -->
+			<a href="x" @click.prevent.top="">A</a>
+
+			<!-- 按键修饰符 -->
+			<!-- 只有在 `key` 是 `Enter` 时调用 `vm.submit()` -->
+			<input v-on:keyup.enter="submit">
+			<!-- 复合按键 -->
+			<!-- Ctrl + Click -->
+			<div @click.ctrl="submit">Do something</div>
+			<!-- .exact 排除其他按键 -->
+			
+			<!-- 鼠标按键修饰符 -->
+			<div @click.right.prevent="submit">Do something</div>
+
+		</div>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+	<script type="text/javascript">
+		let vm = new Vue({
+			el: '#top',
+			data: {
+				counter: 0,
+				text1: "",
+				text2: ""
+			},
+			methods: {
+				do1: function(e) {
+					console.log(e);
+					this.text1 = "do1";
+				},
+				submit: function() {
+					alert(1)
+				}
+			}
+		});
+
+		function do2() {
+			vm.text2 = "do2";
+		}
+	</script>
+</html>

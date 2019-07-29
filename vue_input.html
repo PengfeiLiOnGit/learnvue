@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>表单输入</title>
+	</head>
+	<body>
+		<div id="top">
+			<!-- 双向绑定 -->
+			<input v-model.lazy="message" placeholder="请输入" />
+			<input v-model.number.trim="message" placeholder="请输入" />
+
+			<p>{{message}}</p>
+			<!-- 文本域 -->
+			<textarea rows="" cols="" v-model="message">
+
+			</textarea>
+			<!-- 复选框 -->
+			<input type="checkbox" id="check" v-model="checked" />
+			<label for="check">{{checked}}</label>
+			<!-- 多个复选框 -->
+			<div id="example">
+				<input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+				<label for="jack">Jack</label>
+				<input type="checkbox" id="john" value="John" v-model="checkedNames">
+				<label for="john">John</label>
+				<input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+				<label for="mike">Mike</label>
+				<br>
+				<span>Checked names: {{ checkedNames }}</span>
+			</div>
+			<div id="example4">
+				<input type="radio" id="one" value="One" v-model="picked">
+				<label for="one">One</label>
+				<br>
+				<input type="radio" id="two" value="Two" v-model="picked">
+				<label for="two">Two</label>
+				<br>
+				<span>Picked: {{ picked }}</span>
+			</div>
+			<!-- 单选下拉 -->
+			<div id="example5">
+				<select v-model="selected">
+					<option disabled value="">请选择</option>
+					<option>A</option>
+					<option>B</option>
+					<option>C</option>
+				</select>
+				<span>Selected: {{ selected }}</span>
+			</div>
+			<!-- 下拉多选 -->
+			<select v-model="selecteds" multiple>
+				<option>A</option>
+				<option>B</option>
+				<option>C</option>
+			</select>
+			<span>{{selecteds}}</span>
+			
+			<!-- for -->
+			<!-- model 双向绑定seleced 属性 -->
+			<select v-model="selected">
+				<option v-for="(v,n) of options" :value="v">
+					{{v}} - {{n}} 
+				</option>
+			</select>
+			<!-- 值绑定，复选框/单选框 -->
+			<input type="radio" v-model="picked" :value="a">
+			<span>{{picked}}</span>
+			
+			<select v-model="obj_selected">
+				<option :value="obj">
+					A
+				</option>
+			</select>
+		</div>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script type="text/javascript">
+		let vm = new Vue({
+			el: '#top',
+			data: {
+				message: '',
+				checked: false,
+				checkedNames: ['Jack'],
+				picked: '',
+				selected: 'C',
+				selecteds:[],
+				options:['A','V','C'],
+				a : "123",
+				obj : {
+					a:1,
+					b:2
+				},
+				obj_selected : ''
+			}
+		});
+	</script>
+</html>

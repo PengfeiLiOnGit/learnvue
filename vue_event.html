@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="top">
+			<!-- 时间监听属性不区分大小写 -->
+			<t-test :obj="obj" @click="alert(1)" @test-t="doTest" test="test"></t-test>
+			
+			<base-checkbox v-model="lovingVue"></base-checkbox>
+			<base-input v-model="model_input"></base-input>
+			<span>{{model_input}}</span>
+			
+			<input type="text" @blur="test_blur(123)">
+			
+			<!-- 双向绑定sync 不能使用表达式 -->
+			<text-document v-bind:title.sync="title"></text-document>
+			
+			<!-- <text-document v-bind:title="title" @updatetitle="title=$event"></text-document> -->
+		</div>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script type="text/javascript">
+		Vue.component('text-document',{
+			// template:`<p @click="$emit('updatetitle','this is child')">{{title}}</p>`,
+			template:`<p @click="changeText">{{title}}</p>`,
+			props:['title'],
+			methods:{
+				changeText:function(){
+					this.title = 'this is child';
+				}
+			},
+			watch:{
+				title : function(n,o){
+					console.log("child:",n);
+					console.log("child:",o)
+				}
+			},
+		});
+		Vue.component('base-input', {
+			props: {
+				input_t: String
+			},
+			computed:{
+			},
+			template: `
+				<input
+				  type="input"
+				  :value="input_t"
+				  v-on:input="$emit('input', $event.target.value)"
+				  t = "list"
+				>
+			  `
+		});
+		Vue.component('base-checkbox', {
+			model: {
+				// 细化
+				prop: 'checked',
+				// 时间关注
+				event: 'change'
+			},
+			props: {
+				// 仍然需要注册checked属性
+				checked: Boolean
+			},
+			template: `
+				<input
+				  type="checkbox"
+				  v-bind:checked="checked"
+				  v-on:change="$emit('change', $event.target.checked)"
+				>
+			  `
+		})
+		let vm = new Vue({
+			el: '#top',
+			data: {
+				obj: {
+					name: 'JONY',
+					title: 'title'
+				},
+				lovingVue : true,
+				model_input : '123',
+				title : "this is title"
+			},
+			watch:{
+				title : function(o,v){
+					console.log(o);
+					console.log(v)
+				}
+			},
+			components: {
+				"t-test": {
+					props: ['obj'],
+					computed:{
+						tt : function(){
+							console.log(this.$attrs);
+							console.log(this.$listeners);
+							console.log(this.$event);
+							return "xxx";
+						}
+					},
+					template: `<button @click="$emit('test-t',123)">{{obj.name}}--{{tt}}</button>`
+				}
+			},
+			methods: {
+				doTest: function(e) {
+					alert(e)
+				},
+				test_blur:function(e){
+					alert(e)
+				}
+			}
+		});
+	</script>
+
+</html>

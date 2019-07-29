@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="top">
+			<!-- v-if lazy，v-show 初始渲染 -->
+			<p v-if="awesome">awesome</p>
+			<p v-else-if="isAwesome">just fine</p>
+			<p v-else>Oh no</p>
+			<template v-if="ok">
+				<h1>Title</h1>
+				<p>P2</p>
+			</template>
+			<!-- 设置key值，不会缓存输入内容 -->
+			<template v-if="loginType === 'username'">
+				<label>Username</label>
+				<input placeholder="Enter your username" key="username-input">
+			</template>
+			<template v-else>
+				<label>Email</label>
+				<input placeholder="Enter your email address" key="email-input">
+			</template>
+			<button @click="toggle">toggle</button>
+		</div>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script type="text/javascript">
+		let vm = new Vue({
+			el: '#top',
+			data: {
+				awesome: false,
+				ok: false,
+				isAwesome: true,
+				loginType: 'username'
+			},
+		});
+		function toggle(){
+			if(vm.loginType == 'username'){
+				vm.loginType = 'emall'
+			}else{
+				vm.loginType = 'username'
+			}
+		}
+	</script>
+</html>

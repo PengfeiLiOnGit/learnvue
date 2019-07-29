@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!-- 作用域插槽，反向，由子组件的内容为主 -->
+		<div id="top">
+			<!-- 只有默认插槽 -->
+			<current-user v-slot:default="slotProps">
+				<!-- 如果slot存在first name则显示firstName -->
+				{{slotProps.user.firstName}}
+			</current-user>
+
+			<current-user v-slot="slotProps">
+				<!-- 如果slot存在first name则显示firstName -->
+				{{slotProps.user.firstName}}
+			</current-user>
+			<!-- ES6 解构插槽 -->
+			<current-user v-slot="{user}">
+				{{ user.firstName }}
+			</current-user>
+			<!-- 动态插槽 -->
+			<!-- 具名插槽缩写 -->
+			<current-user2>
+				<template #header>
+					123
+				</template>
+				<!-- 默认具名插槽必须指定插槽名default -->
+				<template #default="{user}">
+					{{ user.firstName }}
+				</template>
+			</current-user2>
+
+			<todo-list v-bind:todos="todos">
+				<!-- 替换todo插槽 -->
+				<template v-slot:todo="{ todo }">
+					<span v-if="todo.isComplete">✓</span>
+					{{ todo.text }}
+				</template>
+			</todo-list>
+		</div>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script type="text/javascript">
+		Vue.component("todo-list",{
+			props:['todos'],
+			computed:{
+				filteredTodos : function(){
+					return this.todos;
+				}
+			},
+			template:`<ul>
+			  <li
+				v-for="todo in filteredTodos"
+				v-bind:key="todo.id"
+			  >
+				<slot name="todo" :todo="todo">
+				  {{ todo.text }}
+				</slot>
+			  </li>
+			</ul>`
+		});
+		Vue.component('current-user2', {
+			data: function() {
+				return {
+					user: {
+						firstName: "pengfei",
+						lastName: 'Li'
+					}
+				}
+			},
+			// user lastName 为后备内容
+			template: `<span>
+			  <slot name="header">
+			  	{{ user.lastName }}
+			  </slot>
+			  <slot :user="user">
+				{{ user.lastName }}
+			  </slot>
+			</span>`,
+		});
+		Vue.component('current-user', {
+			data: function() {
+				return {
+					user: {
+						firstName: "pengfei",
+						lastName: 'Li'
+					}
+				}
+			},
+			// user lastName 为后备内容
+			template: `<span>
+			  <slot :user="user">
+				{{ user.lastName }}
+			  </slot>
+			</span>`,
+		})
+		let vm = new Vue({
+			el: '#top',
+			data:{
+				todos : [{id:0,isComplete:true,text:"this is text"},
+				{id:1,text:"this is text2"}]
+			}
+		})
+	</script>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="top">
+			<!-- t 为非prop 特性绑定 -->
+			<blog-post post-title="hello!" t="s"></blog-post>
+			<!-- 绑定赋值 -->
+			<blog-post :post-title="title"></blog-post>
+			<!-- 传入对象所有属性 -->
+			<blog-post v-bind="post"></blog-post>
+		</div>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script type="text/javascript">
+		Vue.component('blog-post', {
+			// 在 JavaScript 中是 camelCase 的
+
+			// props 值类型
+			// props: ['postTitle'],
+			props: {
+				postTitle: String,
+				// 值验证
+				initialCounter: [String, Number],
+				//  必填
+				name: {
+					type: String,
+					required: true
+				},
+				// 默认值
+				default_: {
+					type: Number,
+					default: 100
+				},
+				// 自定义验证
+				check: {
+					validator: function(value) {
+						// 这个值必须匹配下列字符串中的一个
+						return ['success', 'warning', 'danger'].indexOf(value) !== -1
+					}
+				}
+			},
+			template: `<h3>{{ postTitle }} - {{ counter }} - {{initialCounter}}- {{name}} - {{default_}}</h3>`,
+			// 重定义prop 子组件单独维护
+			data: function() {
+				return {
+					//  只针对简单值
+					counter: this.initialCounter
+				}
+			}
+		})
+		let vm = new Vue({
+			el: '#top',
+			data: {
+				title: 'JONY',
+				post: {
+					postTitle: "QQQQ",
+					initialCounter: 2
+				},
+			}
+		})
+	</script>
+
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="top">
+			<!-- 组件和混入对象喊有同名选项，这些选项以前档的方式进行“合并” -->
+			<!-- 组件数据优先 -->
+		</div>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script type="text/javascript">
+		// 全局混入
+		// 使用自定义选项时使用,其他情况慎用
+		Vue.mixin({
+			created: function() {
+				console.log("ALL:>>",this.$options);
+			}
+		});
+		// 定义一个混入对象
+		var myMixin = {
+			data: function() {
+				return {
+					message: 'hello',
+					foo: 'abc'
+				}
+			},
+			// 事件钩子
+			created: function() {
+				this.hello();
+				console.log(this.$data);
+				console.log('this is mixin')
+			},
+			methods: {
+				hello: function() {
+					console.log('hello from mixin!')
+				},
+				conflicting: function() {
+					console.log('this is mixin method')
+				}
+			}
+		};
+		// 定义一个使用混入对象的组件
+		// extend
+		// 合并策略同实例
+		var Component = Vue.extend({
+			mixins: [myMixin]
+		});
+
+		// var component = new Component() // => "hello from mixin!"
+		// 以实例为准
+		let vm = new Vue({
+			el: '#top',
+			// 
+			mixins: [myMixin],
+			data: {
+				// 同名取实例属性为准
+				foo: 'def'
+			},
+			// 同名钩子函数将合并为一个数组，因此都将被调用。另外，混入对象的钩子将在组件自身钩子之前调用。
+			// 钩子先执行 混入对象
+			created: function() {
+				console.log('this is new Vue');
+			},
+			methods: {
+				// 同名取实例方法
+				conflicting: function() {
+					console.log('this is Vue method')
+				}
+			}
+		});
+		// mixin 对象data类似组件的作用域
+	</script>
+
+</html>

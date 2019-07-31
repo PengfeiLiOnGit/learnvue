@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="top">
+			<div v-cl>test</div>
+			<input v-model="field" v-focus />
+			<p>{{field}}</p>
+
+			<div id="baseexample">
+				<p>Scroll down the page</p>
+				<p v-pin:[direction]="200">Stick me 200px from the top of the page</p>
+			</div>
+		</div>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script type="text/javascript">
+		// 注册自定义指令(全局)
+		// Vue.directive('focus',{
+		// 	// 插入dom时
+		// 	inserted : function(el){
+		// 		el.focus();
+		// 	}
+		// });
+
+		// bind 和 update 时触发相同行为，而不关心其它的钩子。比如这样写:
+		// Vue.directive('focus',
+		// 	// 插入dom时
+		// 	function(el,binding) {
+		// 		el.focus();
+		// 	}
+		// );
+
+		Vue.directive('pin', {
+			// 初始化绑定
+			// 获取指令参数
+			bind: function(el, binding, vnode) {
+				el.style.position = 'fixed'
+				// 获取绑定参数信息
+				var s = (binding.arg == 'left' ? 'left' : 'top')
+				el.style[s] = binding.value + 'px';
+				console.log(vnode)
+			},
+			update: function(el, binding, vnode) {
+				var s = (binding.arg == 'left' ? 'left' : 'top')
+				el.style[s] = binding.value + 'px'
+			}
+		})
+		let vm = new Vue({
+			el: '#top',
+			data: {
+				field: '',
+				direction: 'left'
+			},
+			// 局部指令
+			directives: {
+				focus: {
+					// 指令的定义
+					// 被绑定元素插入父节点时调用
+					inserted: function(el) {
+						el.focus()
+					},
+				}
+			},
+			methods: {
+				test: function(e) {
+					console.log(e)
+				}
+			}
+		});
+	</script>
+
+</html>

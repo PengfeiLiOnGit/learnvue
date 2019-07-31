@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>渲染函数</title>
+	</head>
+	<body>
+		<div id="top">
+			<anc-heading level="3" #default>HHHC</anc-heading>
+		</div>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script>
+		// 组件渲染函数
+		// 使用render钩子
+		// VNODE 必须唯一
+		// 重复的VNODE 需要多次调用createElement
+		Vue.component('anc-heading', {
+			// 渲染
+			render: function(createElement) {
+				console.log(this.$slots);
+				// createElement 虚拟节点
+				// 接收3个参数
+				return createElement(
+					'h' + this.level, // 标签名称
+					this.$slots.default // 子节点数组
+				)
+			},
+			props: {
+				level: {
+					type: Number,
+					required: true
+				}
+			}
+		});
+
+		let vm = new Vue({
+			el: '#top'
+		})
+	</script>
+</html>

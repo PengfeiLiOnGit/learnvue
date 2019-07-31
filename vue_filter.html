@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="top">
+			<!-- 使用过滤器T 过去msg 信息 -->
+			<!-- 局部过滤器会覆盖全局过滤器 -->
+			{{msg | t}}
+			<!-- 串联过滤器 -->
+			{{ msg | t | t2('x','y') }}
+		</div>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script type="text/javascript">
+		let vm = new Vue({
+			el:'#top',
+			data:{
+				msg : '       123'
+			},
+			filters:{
+				t : function(v){
+					return v.toString().trim();
+				},
+				// 接收多个参数
+				t2 : function(v,v1,v2){
+					console.log(v);
+					return v.replace('2','XXX') + v1 + v2
+				}
+			}
+		})
+	</script>
+
+</html>

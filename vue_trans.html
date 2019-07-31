@@ -4,6 +4,7 @@
 		<meta charset="utf-8">
 		<title></title>
 	</head>
+	<link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
 	<style type="text/css">
 		.test-enter-active,
 		.test-leave-active {
@@ -30,6 +31,7 @@
 		.bounce-leave-active {
 			animation: bounce-in .5s reverse;
 		}
+
 		/* v-enter 类名在节点插入 DOM 后不会立即删除，而是在 animationend 事件触发时删除 */
 		@keyframes bounce-in {
 			0% {
@@ -50,7 +52,7 @@
 			<!-- show 状态 -->
 			<div id="demo">
 				<!-- CSS 过滤 -->
-				<button v-on:click="show = !show">
+				<button v-on:click="show = !show" id="c">
 					Toggle
 				</button>
 				<!-- 过滤组件 name 为变量v css类前缀-->
@@ -64,6 +66,27 @@
 					<p v-if="show">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris facilisis enim libero, at lacinia
 						diam fermentum id. Pellentesque habitant morbi tristique senectus et netus.</p>
 				</transition>
+				<!-- 第三方库动画结合 -->
+				<div id="example-3">
+					<button @click="show = !show">
+						Toggle render
+					</button>
+					<!-- 监听钩子事件 -->
+					<transition @before-enter="beforeEnter" name="custom-classes-transition" enter-active-class="animated tada"
+					 leave-active-class="animated bounceOutRight">
+						<p v-if="show">hello</p>
+					</transition>
+				</div>
+				<!-- appear 初始化渲染动画 -->
+				<div id="example-4">
+					<button @click="show = !show">
+						Toggle render
+					</button>
+					<!-- 监听钩子事件 -->
+					<transition appear appear-active-class="animated tada">
+						<p v-if="show">hello</p>
+					</transition>
+				</div>
 			</div>
 		</div>
 	</body>
@@ -73,8 +96,17 @@
 			el: '#top',
 			data: {
 				show: true
+			},
+			methods: {
+				beforeEnter: function(el) {
+					console.log(el)
+				}
 			}
 		});
+		// 未监听到
+		function listenBeforeEnter() {
+			console.log(1);
+		}
 	</script>
 
 </html>

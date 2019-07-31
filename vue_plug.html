@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="top">
+
+		</div>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script type="text/javascript">
+		let p = {};
+		p.install = function(Vue, options) {
+			console.log(options);
+			// 1. 添加全局方法或属性
+			Vue.myGlobalMethod = function() {
+					// 逻辑...
+					console.log('this is pulg')
+				},
+				// 全局属性
+				Vue.x = 2,
+				// 4. 添加实例方法
+				Vue.prototype.$myMethod = function(methodOptions) {
+					// 逻辑...
+					console.log("this is method")
+				}
+		};
+
+		Vue.use(p, {
+			a: 1
+		});
+		let vm = new Vue({
+			el: '#top',
+		});
+	</script>
+</html>

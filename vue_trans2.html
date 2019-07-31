@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			.test-enter-active,
+			.test-leave-active {
+				/* 指定过滤相关参数，如果过滤类别，时间，曲线函数 */
+				transition: all .5s;
+			}
+
+			/* enter 执行动画开始,从0 开始 */
+			.test-enter {
+				/* transform: translateX(0px); */
+				opacity: 0;
+			}
+
+			/* leave-to 执行动画结束 离开是位0 */
+			/* 进入和离开由if 判断获得的true确定 */
+			.test-leave-to
+
+			/* .fade-leave-active below version 2.1.8 */
+				{
+				opacity: 0;
+				transform: translateX(-30px);
+			}
+
+			.component-fade-enter-active,
+			.component-fade-leave-active {
+				transition: opacity .3s ease;
+			}
+
+			.component-fade-enter,
+			.component-fade-leave-to
+
+			/* .component-fade-leave-active for below version 2.1.8 */
+				{
+				opacity: 0;
+			}
+
+			/* -move 特性，在元素改变定位的过程中应用 */
+			.flip-list-move {
+				transition: transform 1s;
+			}
+			
+			.list-move{
+				transition: all 1s;
+			}
+			
+			.list-item {
+				display: inline-block;
+				margin-right: 10px;
+				/* trans属性 */
+				/* transition: all 1s; */
+			}
+
+			.list-enter-active,
+			.list-leave-active {
+				transition: all 1s;
+			}
+
+			.list-enter,
+			.list-leave-to
+			/* .list-leave-active for below version 2.1.8 */
+				{
+				opacity: 0;
+				transform: translateY(30px);
+			}
+
+			.list-leave-active {
+				position: absolute;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="top">
+			<!-- 过渡模式 mode - out-in/in-out -->
+			<transition name="test" mode="out-in" id="demo">
+				<!-- <p v-if="show">Hello!</p> -->
+				<!-- 多个元素的过滤需要指定key -->
+				<button type="button" v-if="show" @click="show = !show" key="on">on</button>
+				<button type="button" v-if="!show" @click="show = !show" key="off">off</button>
+			</transition>
+
+			<!-- 多个组件过滤 -->
+			<transition name="component-fade" mode="out-in">
+				<component v-bind:is="view"></component>
+			</transition>
+
+			<!-- 列表排序过滤 -->
+			<div id="flip-list-demo" class="demo">
+				<button v-on:click="shuffle">Shuffle</button>
+				<button v-on:click="add">Add</button>
+				<button v-on:click="remove">Remove</button>
+				<!-- tag 包裹tag -->
+				<transition-group name="flip-list" tag="ul">
+					<li v-for="item in items" v-bind:key="item">
+						{{ item }}
+					</li>
+				</transition-group>
+			</div>
+
+			<div id="list-demo" class="demo">
+				<transition-group name="list" tag="p">
+					<span v-for="item in items" v-bind:key="item" class="list-item">
+						{{ item }}
+					</span>
+				</transition-group>
+			</div>
+			
+			<!-- 过滤组件-函数式组件 -->
+			<!-- 循环执行动画，通过事件钩子更改 v-if 状态 -->
+		</div>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.14.1/lodash.min.js"></script>
+	<script type="text/javascript">
+		let vm = new Vue({
+			el: '#top',
+			data: {
+				show: true,
+				view: 'v-a',
+				items: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+				nextNum: 10
+			},
+			methods: {
+				shuffle: function() {
+					this.items = _.shuffle(this.items)
+				},
+				randomIndex: function() {
+					return Math.floor(Math.random() * this.items.length)
+				},
+				add: function() {
+					this.items.splice(this.randomIndex(), 0, this.nextNum++)
+				},
+				remove: function() {
+					this.items.splice(this.randomIndex(), 1)
+				},
+			},
+			components: {
+				'v-a': {
+					template: '<div>Component A</div>'
+				},
+				'v-b': {
+					template: '<div>Component B</div>'
+				}
+			}
+		});
+	</script>
+
+</html>
